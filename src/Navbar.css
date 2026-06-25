@@ -1,0 +1,112 @@
+/* ==========================================
+   ENHANCED PREMIUM E-COMMERCE NAVBAR
+   ========================================== */
+
+:root {
+  /* Psychological Color Metric: Deep Midnight Slate for premium trust & security */
+  --bg-dark-premium: #0f172a; 
+  --text-bright: #ffffff;
+  --text-muted-lux: #94a3b8;
+  
+  /* High-energy action color for high visibility */
+  --color-accent-gold: #f59e0b; 
+  --color-accent-hover: rgba(245, 158, 11, 0.15);
+  
+  /* Elevate elevation for a physical, premium texture */
+  --shadow-premium: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+}
+
+/* Main Navigation Bar Shell */
+.nav {
+  background-color: var(--bg-dark-premium);
+  box-shadow: var(--shadow-premium);
+  /* Generous vertical padding to physically scale up the size of the whole navbar area */
+  padding: 1.2rem 3rem; 
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  border-bottom: 1px solid #1e293b;
+}
+
+/* Unordered List Container */
+.ul {
+  list-style: none;
+  display: flex;
+  gap: 2.5rem; /* Increased distance for effortless clickability */
+  margin: 0;
+  padding: 0;
+}
+
+/* Navigation List Item Hooks */
+.ul li {
+  position: relative;
+}
+
+/* Large, Interactive Navigation Buttons */
+.ul li a {
+  text-decoration: none;
+  color: var(--text-muted-lux);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  
+  /* SIZING TRANSFORMATION: Larger font weight and absolute size */
+  font-size: 1.2rem; 
+  font-weight: 600; 
+  letter-spacing: 0.02em;
+  
+  /* BUTTON EXPANSION: Added luxurious padding around the links to look like solid buttons */
+  padding: 0.8rem 1.6rem; 
+  border-radius: 10px; 
+  display: inline-block;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hover Interaction State */
+.ul li a:hover {
+  color: var(--color-accent-gold); /* Transitions to premium gold/amber */
+  background-color: var(--color-accent-hover); /* Gentle, classy background highlight */
+  transform: translateY(-2px); /* Slight hover lift */
+}
+
+/* Active Finger Tap/Click Response */
+.ul li a:active {
+  transform: translateY(0) scale(0.96);
+}
+
+/* Premium Animated Baseline Underline Highlight */
+.ul li a::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  width: 0;
+  height: 3px;
+  background-color: var(--color-accent-gold);
+  border-radius: 4px;
+  transition: all 0.25s ease;
+  transform: translateX(-50%);
+}
+
+.ul li a:hover::after {
+  width: 50%; /* Smoothly expands highlight line when user focuses element */
+}
+
+/* Responsive Scaling for Tablets and Mobile Devices */
+@media (max-width: 768px) {
+  .nav {
+    padding: 1rem 1.5rem;
+  }
+  
+  .ul {
+    gap: 1rem;
+    width: 100%;
+    justify-content: space-around;
+  }
+
+  .ul li a {
+    font-size: 1rem; /* Marginally scaled down for small viewports to maintain spacing safety */
+    padding: 0.6rem 1rem;
+  }
+}

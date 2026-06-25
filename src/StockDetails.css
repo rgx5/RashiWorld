@@ -1,0 +1,314 @@
+.stock-detail-page {
+    background-color: #0b0f19; /* Extended midnight layout canvas */
+    min-height: 95vh;
+    padding: 2.5rem 8%;
+    color: #f8fafc;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* 1. Breadcrumb Handling */
+.breadcrumb-nav {
+    margin-bottom: 2rem;
+}
+
+.back-link {
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: color 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.back-link:hover {
+    color: #f59e0b; /* Amber focus sync */
+}
+
+/* 2. Structured Content Layout Grid */
+.stock-main-layout {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 4rem;
+    align-items: start;
+}
+
+/* 3. Media Presentation Architecture */
+.media-showcase {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.main-display-box {
+    background-color: #0f172a;
+    border-radius: 16px;
+    border: 1px solid #1e293b;
+    height: 550px;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+}
+
+.active-media {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.image-clickable {
+    cursor: zoom-in;
+}
+
+/* Embedded Media Element Video Overrides */
+.video-player-wrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.sound-toggle-btn {
+    position: absolute;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    background: rgba(15, 23, 42, 0.85);
+    color: #ffffff;
+    border: 1px solid #334155;
+    padding: 0.5rem 1rem;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+    transition: all 0.2s ease;
+}
+
+.sound-toggle-btn:hover {
+    background: #f59e0b;
+    color: #0f172a;
+    border-color: #f59e0b;
+}
+
+/* Slider / Thumbnails Row Track */
+.thumbnails-track {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+}
+
+.thumb-card {
+    width: 90px;
+    height: 90px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    border: 2px solid #1e293b;
+    background-color: #0f172a;
+    overflow: hidden;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.25s ease;
+}
+
+.thumb-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.thumb-card.is-active {
+    border-color: #f59e0b;
+    transform: scale(0.96);
+}
+
+.video-thumb-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+}
+
+.play-icon {
+    color: #f59e0b;
+    font-size: 1.4rem;
+}
+
+/* 4. Specifications Info Component Panel */
+.info-specification {
+    display: flex;
+    flex-direction: column;
+}
+
+.stock-main-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.2;
+    margin: 0 0 2rem 0;
+    letter-spacing: -0.02em;
+}
+
+/* Specs Structured Matrix Table Layout */
+.specs-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2.5rem;
+}
+
+.specs-table td {
+    padding: 1rem 0;
+    border-bottom: 1px solid #1e293b;
+    font-size: 1.05rem;
+}
+
+.spec-label {
+    color: #64748b;
+    font-weight: 500;
+    width: 40%;
+}
+
+.spec-val {
+    color: #cbd5e1;
+    font-weight: 600;
+}
+
+.highlight-moq {
+    color: #f59e0b; /* Emphasized trading terms */
+}
+
+/* Core Multi-Line Text Processor Box */
+.description-wrapper {
+    margin-bottom: 3rem;
+}
+
+.description-wrapper h3 {
+    font-size: 1.25rem;
+    color: #ffffff;
+    margin-bottom: 0.8rem;
+}
+
+.line-break-text {
+    white-space: pre-line; /* Processes native '\n' newline feeds flawlessly without markdown */
+    color: #94a3b8;
+    line-height: 1.7;
+    font-size: 1.05rem;
+}
+
+/* 5. Direct Conversion WhatsApp Active CTA Hub */
+.inquire-wa-action-btn {
+    background-color: #25d366;
+    color: #ffffff;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    padding: 1.2rem 2rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    border-radius: 12px;
+    box-shadow: 0 10px 20px rgba(37, 211, 102, 0.2);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    text-align: center;
+}
+
+.inquire-wa-action-btn:hover {
+    background-color: #20ba56;
+    transform: translateY(-2px);
+    box-shadow: 0 14px 28px rgba(37, 211, 102, 0.35);
+}
+
+.wa-btn-icon {
+    width: 28px;
+    height: 28px;
+}
+
+/* 6. Desktop Immersive Portal Lightbox layer */
+.lightbox-portal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(11, 15, 25, 0.95);
+    z-index: 20000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(8px);
+}
+
+.lightbox-stage {
+    position: relative;
+    max-width: 85%;
+    max-height: 85%;
+}
+
+.lightbox-img {
+    max-width: 100%;
+    max-height: 85vh;
+    border-radius: 8px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.close-portal-btn {
+    position: absolute;
+    top: -3.5rem;
+    right: 0;
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 3rem;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s ease;
+}
+
+.close-portal-btn:hover {
+    color: #f59e0b;
+}
+
+/* ==========================================
+   RESPONSIVE LAYOUT CONVERSION PIPELINES
+   ========================================== */
+@media (max-width: 992px) {
+    .stock-main-layout {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+    
+    .main-display-box {
+        height: 450px;
+    }
+}
+
+@media (max-width: 640px) {
+    .stock-detail-page {
+        padding: 1.5rem 5%;
+    }
+    
+    .stock-main-title {
+        font-size: 1.8rem;
+    }
+    
+    .main-display-box {
+        height: 350px;
+    }
+    
+    .specs-table td {
+        font-size: 0.95rem;
+    }
+    
+    /* Auto-swipe visual hints configuration for small touchscreens */
+    .thumbnails-track {
+        -webkit-overflow-scrolling: touch;
+    }
+}
+

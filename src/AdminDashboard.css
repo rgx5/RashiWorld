@@ -1,0 +1,367 @@
+/* ==========================================================================
+   AdminDashboard.css - Secure Workspace Panel Theme Elements
+   ========================================================================== */
+
+.admin-dashboard-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #0b0b0c;
+    color: #ffffff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Sidebar Framework Layout Elements */
+.admin-sidebar {
+    width: 280px;
+    background-color: #121214;
+    border-right: 1px solid #242429;
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-brand-zone {
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid #242429;
+}
+
+.admin-logo {
+    background-color: #d4af37;
+    color: #000;
+    font-weight: bold;
+    font-size: 20px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+}
+
+.admin-brand-zone h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #fff;
+}
+
+.admin-brand-zone p {
+    margin: 2px 0 0 0;
+    font-size: 12px;
+    color: #a1a1aa;
+}
+
+.admin-nav-menu {
+    padding: 20px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.nav-btn {
+    width: 100%;
+    background: transparent;
+    border: 1px solid transparent;
+    color: #a1a1aa;
+    padding: 12px 16px;
+    text-align: left;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    transition: all 0.2s;
+}
+
+.nav-btn:hover {
+    background-color: #1c1c1e;
+    color: #fff;
+}
+
+.nav-btn.is-active {
+    background-color: rgba(212, 175, 55, 0.1);
+    color: #d4af37;
+    border-color: rgba(212, 175, 55, 0.2);
+}
+
+.logout-btn-style {
+    background: #271414 !important;
+    color: #ff6b6b !important;
+    border: 1px solid #441c1c !important;
+    justify-content: center;
+}
+
+.logout-btn-style:hover {
+    background: #3d1b1b !important;
+}
+
+/* Master Grid Viewport Stage Elements */
+.admin-main-viewport {
+    flex: 1;
+    padding: 40px;
+    overflow-y: auto;
+}
+
+.viewport-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    border-bottom: 1px solid #242429;
+    padding-bottom: 16px;
+}
+
+.viewport-header h2 {
+    margin: 0;
+    font-size: 22px;
+    letter-spacing: 0.5px;
+}
+
+.secure-badge {
+    background-color: #1c1c1e;
+    border: 1px solid #242429;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    color: #a1a1aa;
+}
+
+/* Form Container Card & Structural Grid Elements */
+.form-card-wrapper, .data-table-wrapper, .card-panel {
+    background-color: #121214;
+    border: 1px solid #242429;
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 32px;
+}
+
+.form-card-wrapper h3, .data-table-wrapper h3, .card-panel h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 16px;
+    color: #d4af37;
+}
+
+.crud-grid-form, .settings-form-layout {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-group.full-width {
+    grid-column: span 2;
+}
+
+.input-group label {
+    font-size: 13px;
+    color: #a1a1aa;
+}
+
+.input-group input, .input-group textarea {
+    background-color: #1c1c1e;
+    border: 1px solid #242429;
+    color: #fff;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.input-group input:focus, .input-group textarea:focus {
+    outline: none;
+    border-color: #d4af37;
+}
+
+.admin-action-btn {
+    grid-column: span 2;
+    padding: 14px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    border: none;
+    font-size: 15px;
+}
+
+.primary-btn {
+    background-color: #d4af37;
+    color: #000;
+}
+
+.primary-btn:hover {
+    background-color: #f3cf65;
+}
+
+/* Operational Data Catalog Listing Grid Rules */
+.table-overflow-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.admin-crud-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.admin-crud-table th {
+    background-color: #1c1c1e;
+    color: #a1a1aa;
+    padding: 14px;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #242429;
+}
+
+.admin-crud-table td {
+    padding: 16px 14px;
+    border-bottom: 1px solid #242429;
+    font-size: 14px;
+}
+
+.font-bold { font-weight: 600; }
+.font-mono { font-family: monospace; color: #a1a1aa; }
+.category-inline-tag {
+    background: #1c1c1e;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    border: 1px solid #242429;
+}
+
+/* Professional Badge indicators Layer */
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.badge-active {
+    background-color: rgba(37, 211, 102, 0.12);
+    color: #25d366;
+    border: 1px solid rgba(37, 211, 102, 0.2);
+}
+
+.badge-hidden {
+    background-color: rgba(161, 161, 170, 0.12);
+    color: #a1a1aa;
+    border: 1px solid rgba(161, 161, 170, 0.2);
+}
+
+.badge-expiring {
+    background-color: rgba(243, 156, 18, 0.12);
+    color: #f39c12;
+    border: 1px solid rgba(243, 156, 18, 0.2);
+}
+
+/* Quick Action Inline Palette Rules */
+.actions-cell-wrapper {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-start;
+}
+
+.action-inline-btn {
+    background: #1c1c1e;
+    border: 1px solid #242429;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.action-inline-btn.edit-btn:hover { border-color: #d4af37; color: #d4af37; }
+.action-inline-btn.toggle-btn:hover { background-color: #242429; }
+.action-inline-btn.delete-btn { background: #271414; border-color: #441c1c; color: #ff6b6b; }
+.action-inline-btn.delete-btn:hover { background: #3d1b1b; }
+
+/* Drag and Drop Zone Pipeline Rules */
+.dropzone-area {
+    border: 2px dashed #242429;
+    border-radius: 8px;
+    padding: 40px;
+    text-align: center;
+    background: #16161a;
+    cursor: pointer;
+}
+
+.dropzone-area input { display: none; }
+.upload-icon { font-size: 32px; display: block; margin-bottom: 12px; }
+.dropzone-label p { margin: 0; font-size: 14px; color: #a1a1aa; }
+
+/* Dynamic Frame Dialog Modal Overlay Architecture */
+.dashboard-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.dashboard-modal-card {
+    background-color: #121214;
+    border: 1px solid #242429;
+    border-radius: 12px;
+    padding: 32px;
+    width: 100%;
+    max-width: 550px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+}
+
+.dashboard-modal-card.confirmation-variant {
+    max-width: 400px;
+}
+
+.dashboard-modal-card h3 { margin-top: 0; color: #d4af37; margin-bottom: 24px; }
+.dashboard-modal-card h4 { margin-top: 0; color: #ff6b6b; font-size: 16px; margin-bottom: 12px; }
+.dashboard-modal-card p { font-size: 14px; color: #a1a1aa; line-height: 1.5; margin-bottom: 24px; }
+
+.modal-actions-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    grid-column: span 2;
+    margin-top: 10px;
+}
+
+.modal-btn {
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+}
+
+.secondary-cancel { background: #1c1c1e; color: #fff; border: 1px solid #242429; }
+.secondary-cancel:hover { background: #242429; }
+.primary-confirm { background: #d4af37; color: #000; }
+.primary-confirm:hover { background: #f3cf65; }
+.destructive-confirm { background: #ff6b6b; color: #fff; }
+.destructive-confirm:hover { background: #ff4c4c; }
+
+/* Transitions Animation */
+.panel-fade-in {
+    animation: fadeInAnimation 0.25s ease-out forwards;
+}
+
+@keyframes fadeInAnimation {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+}

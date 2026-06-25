@@ -1,0 +1,206 @@
+/* ==========================================
+   PRODUCTION READY INTERACTIVE CONTACT GRID
+   ========================================== */
+
+.contact-page-wrapper {
+    background-color: #0b0f19; /* Midnight luxury background matching storefront */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    color: #f8fafc;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    box-sizing: border-box;
+}
+
+/* 1. Header Hero Structure */
+.contact-hero-panel {
+    position: relative;
+    text-align: center;
+    max-width: 600px;
+    margin-bottom: 3.5rem;
+    z-index: 1;
+}
+
+/* Background ambient blur decoration */
+.hero-glow-element {
+    position: absolute;
+    top: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, rgba(245, 158, 11, 0.08) 0%, rgba(0,0,0,0) 70%);
+    z-index: -1;
+    pointer-events: none;
+}
+
+.contact-brand-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.contact-brand-logo {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: #0f172a;
+    font-size: 2rem;
+    font-weight: 800;
+    width: 55px;
+    height: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    margin-bottom: 1rem;
+    box-shadow: 0 8px 24px rgba(245, 158, 11, 0.2);
+}
+
+.contact-company-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin: 0;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+}
+
+.contact-brand-tagline {
+    color: #94a3b8;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    margin: 0.5rem 0 0 0;
+    font-weight: 600;
+}
+
+.contact-blurb-text {
+    font-size: 1.1rem;
+    color: #cbd5e1;
+    line-height: 1.6;
+    margin: 1rem 0 0 0;
+}
+
+/* 2. Grid & Interactive Links Panels */
+.contact-links-panel {
+    width: 100%;
+    max-width: 800px;
+}
+
+.contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    width: 100%;
+}
+
+/* Card Styling Framework */
+.contact-card {
+    background: #0f172a;
+    border: 1px solid #1e293b;
+    border-radius: 16px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Clean Dynamic Hover Glow effect */
+.contact-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--hover-color);
+    box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.5);
+    background: #131e35;
+}
+
+/* Visual prominence treatment for WhatsApp */
+.primary-highlight-card {
+    border-color: rgba(37, 211, 102, 0.25);
+    background: linear-gradient(180deg, #0f172a 0%, rgba(37, 211, 102, 0.03) 100%);
+}
+
+.icon-wrapper {
+    background: #1e293b;
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.3s ease;
+}
+
+.contact-card:hover .icon-wrapper {
+    background: #0f172a;
+}
+
+.contact-icon {
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
+}
+
+.card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    text-align: left;
+}
+
+.channel-name {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.channel-subtitle {
+    font-size: 0.9rem;
+    color: #64748b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 160px;
+}
+
+.channel-action {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-top: 0.3rem;
+    letter-spacing: 0.02em;
+}
+
+/* 3. Footer Details Row */
+.contact-disclaimer-bar {
+    margin-top: 4rem;
+    font-size: 0.8rem;
+    color: #475569;
+    text-align: center;
+    max-width: 500px;
+    line-height: 1.5;
+}
+
+/* Responsive Structural Modifications */
+@media (max-width: 640px) {
+    .contact-page-wrapper {
+        padding: 3rem 1rem;
+    }
+    .contact-company-title {
+        font-size: 2rem;
+    }
+    .contact-blurb-text {
+        font-size: 1rem;
+    }
+    .contact-grid {
+        grid-template-columns: 1fr;
+    }
+    .channel-subtitle {
+        max-width: 100%;
+    }
+}

@@ -1,0 +1,100 @@
+/* Container layout centering the card */
+.login-container {
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    background-color: #111111;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Professional dark glassmorphism card styling */
+.login-card {
+    background: #1c1c1e;
+    padding: 40px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 400px;
+    color: #ffffff;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    border: 1px solid #2c2c2e;
+    box-sizing: border-box;
+}
+
+.login-title {
+    margin-bottom: 24px;
+    text-align: center;
+    color: #d4af37;
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.error-message {
+    color: #ff453a;
+    font-size: 14px;
+    margin-bottom: 16px;
+    text-align: center;
+    background: rgba(255, 69, 58, 0.1);
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 69, 58, 0.2);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #aeaeae;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px;
+    background: #2c2c2e;
+    border: 1px solid #3a3a3c;
+    color: #ffffff;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 15px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #d4af37;
+    box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+}
+
+/* Gold button with elegant hover and disabled transitions */
+.submit-btn {
+    width: 100%;
+    padding: 14px;
+    background-color: #d4af37;
+    border: none;
+    color: #000000;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background-color 0.2s, transform 0.1s;
+    margin-top: 10px;
+}
+
+.submit-btn:hover:not(:disabled) {
+    background-color: #f3cf65;
+}
+
+.submit-btn:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+.submit-btn:disabled {
+    background-color: #3a3a3c;
+    color: #8e8e93;
+    cursor: not-allowed;
+}
