@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom'; // FIXED: Added the Router link import
 import "./Navbar.css";
 
 const Navbar = () => {
@@ -16,11 +17,12 @@ const Navbar = () => {
             </div>
 
             {/* Menu Items */}
+            {/* FIXED: Swapped out all <a> href tags for optimized <Link> components */}
             <ul className="ul">
-                <li><a href="/">Home</a></li>
-                <li><a href="/stockDetails">Stock Details</a></li>
-                <li><a href="/contact">Contact</a></li>
-                <li><a href="/adminDashboard">Admin</a></li>
+                <li><Link to="/">Home</Link></li>
+                <li><Link to="/stockDetails">Stock Details</Link></li>
+                <li><Link to="/contact">Contact</Link></li>
+                <li><Link to="/adminDashboard">Admin</Link></li>
             </ul>
         </nav>
     );
