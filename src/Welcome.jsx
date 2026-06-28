@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Welcome.css';
+import stock6 from './assets/stock6.jpeg';
 
 const Welcome = () => {
     const headingOptions = [
@@ -55,7 +56,7 @@ const Welcome = () => {
             id: 4,
             title: "Classic Slim-fit Shirt",
             tag: "Best Seller",
-            image: "src/assets/stock6.jpeg"
+            image: {stock6}
         }
     ];
 
