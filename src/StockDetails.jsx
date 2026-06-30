@@ -1,11 +1,25 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 import './StockDetails.css';
 
 const StockDetails = () => {
+    const location = useLocation();
+
+     const selectedStock = location.state;
     
     const stockData = {
         title: "Rashi Worldwide - Premium Clothing Exports",
+        media: [
+        {
+            id: 1,
+            type: "image",
+            url: selectedStock?.image || "/assets/stock5.jpeg",
+        },
+        { id: 2, type: "image", url: "/assets/stock6.jpeg" },
+        { id: 3, type: "image", url: "/assets/stock2.jpeg" },
+        { id: 4, type: "video", url: "/assets/sampleVideo.mp4" },
+    ],
         brand: "Puma, Nike, Lacoste, Rare Rabbit, U.S.Polo ASSN, Hackett, Under Armour, Adidas, Hermès, Custom",
         category: "T-shirt, Polo, Jacket, Track Pants, Cargo, Shorts, Hoodie, Other",
         fabric: "Cotton Denim, T400 Denim, Rayon Fabric, Interlock Fabric, Cotton T-Shirt, Premium T400 Stretch Fabric with Heavy Zip",

@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import './Welcome.css';
 
 const Welcome = () => {
+    const navigate = useNavigate();
+
+
     const headingOptions = [
         "New Arrivals: Global Drop '26",
         "Just In: Minimalist Aesthetics",
@@ -126,7 +130,7 @@ const Welcome = () => {
                                 "Fashion is a universal language. We weave comfort, culture, and timeless luxury into garments that speak to the world."
                             </blockquote>
                             <button className="hero-btn" onClick={() => { setViewMode('lookbook'); setActiveLookIndex(0); }}>
-                                View Editorial Lookbook
+                                View All New Stocks
                             </button>
                         </div>
                     </header>
@@ -142,7 +146,22 @@ const Welcome = () => {
                                     key={item.id}
                                     className="product-card"
                                     style={{ animationDelay: `${index * 0.05}s` }}
-                                    onClick={() => { setViewMode('lookbook'); setActiveLookIndex(index); }}
+                                    onClick={() =>
+                                        navigate("/StockDetails", {
+                                            state: {
+                                                image: item.image,
+                                                title: item.title,
+                                                tag: item.tag,
+                                            },
+                                        })
+                                    }
+
+
+
+
+
+
+
                                 >
                                     <div className="image-wrapper">
                                         <span className="product-badge">{item.tag}</span>
@@ -162,7 +181,7 @@ const Welcome = () => {
                     {/* Header Action Row */}
                     <div className="lookbook-top-bar">
                         <button className="minimal-close-btn" onClick={() => setViewMode('storefront')}>
-                            ✕ Close Lookbook
+                            ✕ Close
                         </button>
                         <div className="lookbook-pagination">
                             0{activeLookIndex + 1} <span>/ 0{lookbookItems.length}</span>
