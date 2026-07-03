@@ -1,92 +1,76 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from 'react-router-dom';
 import './StockDetails.css';
 
 const StockDetails = () => {
     const location = useLocation();
+    const selectedStock = location.state;
 
-     const selectedStock = location.state;
-    
-    const stockData = {
-        title: "Rashi Worldwide - Premium Clothing Exports",
-        media: [
-        {
-            id: 1,
-            type: "image",
-            url: selectedStock?.image || "/assets/stock5.jpeg",
-        },
-        { id: 2, type: "image", url: "/assets/stock6.jpeg" },
-        { id: 3, type: "image", url: "/assets/stock2.jpeg" },
-        { id: 4, type: "video", url: "/assets/sampleVideo.mp4" },
-    ],
-        brand: "Puma, Nike, Lacoste, Rare Rabbit, U.S.Polo ASSN, Hackett, Under Armour, Adidas, Hermès, Custom",
-        category: "T-shirt, Polo, Jacket, Track Pants, Cargo, Shorts, Hoodie, Other",
-        fabric: "Cotton Denim, T400 Denim, Rayon Fabric, Interlock Fabric, Cotton T-Shirt, Premium T400 Stretch Fabric with Heavy Zip",
-        moq: "50 Sets per colour",
-        colours: "Multiple Colors Available",
-        sizeRange: "S, M, L, XL, XXL",
-        description: "A well-structured product catalog showcasing apparel categories, fabric details, size ranges, color options, and stock availability, allowing global buyers to efficiently browse collections and submit inquiries for bulk orders.",
-        // FIXED: Converted all media locations to clean, absolute public asset routes
-        media: [
-            { id: 1, type: 'image', url: "/assets/stock5.jpeg" },
-            { id: 2, type: 'image', url: "/assets/stock6.jpeg" },
-            { id: 3, type: 'image', url: "/assets/stock2.jpeg" },
-            { id: 4, type: 'video', url: "/assets/sampleVideo.mp4" }
-        ]
-    };
-
-    const [activeMediaIndex, setActiveMediaIndex] = useState(0);
     const [isMuted, setIsMuted] = useState(true);
     const [isLightboxOpen, setIsLightboxOpen] = useState(false);
-
-    const currentMedia = stockData.media[activeMediaIndex];
     const videoRef = useRef(null);
 
-    useEffect(() => {
-        if (currentMedia.type === 'video' && videoRef.current) {
-            videoRef.current.muted = isMuted;
+    if (!selectedStock) {
+        return (
+            <div className="stock-detail-page error-state">
+                <div className="breadcrumb-nav">
+                    <Link to="/" className="back-link">← Back to Collections</Link>
+                </div>
+                <div className="error-message-box">
+                    <h2>No Product Selected</h2>
+                    <p>Please select a product from the home page catalog to view its details.</p>
+                </div>
+            </div>
+        );
+    }
 
+    const isVideo = selectedStock.image?.endsWith('.mp4') || selectedStock.mediaType === 'video';
+
+    useEffect(() => {
+        if (isVideo && videoRef.current) {
+            videoRef.current.muted = isMuted;
             const playPromise = videoRef.current.play();
             if (playPromise !== undefined) {
                 playPromise.catch(error => {
-                    console.warn("Playback prevented or interrupted: ", error);
+                    console.warn("Autoplay setup: ", error);
                 });
             }
         }
-    }, [activeMediaIndex, currentMedia.type, isMuted]);
+    }, [isVideo, isMuted]);
 
-    // Formulate the WhatsApp API URL safely
     const whatsappBaseUrl = "https://wa.me/917709008441";
     const encodedMessage = encodeURIComponent(
-        `Hi Rashi Worldwide, I'm interested in [${stockData.title}]. Please share more details.`
+        `Hi Rashi Worldwide, I would like to request a bulk lot quote and inventory sheet for: ${selectedStock.title || "Premium Apparel Lot"}.`
     );
     const whatsappLink = `${whatsappBaseUrl}?text=${encodedMessage}`;
 
     return (
-        <div className="stock-detail-page">
+        <div className="stock-detail-page compact-container">
             {/* Top Navigation Row */}
             <div className="breadcrumb-nav">
                 <Link to="/" className="back-link">
-                    <span className="arrow">←</span> Back to All Stock
+                    <span className="arrow">←</span> Back to Global Collections
                 </Link>
             </div>
 
-            <div className="stock-main-layout">
-                {/* LEFT SIDE: Media Segment */}
-                <section className="media-showcase">
-                    <div className="main-display-box">
-                        {currentMedia.type === 'image' ? (
-                            <img
-                                src={currentMedia.url}
-                                alt={`View of ${stockData.title}`}
-                                className="active-media image-clickable"
-                                onClick={() => setIsLightboxOpen(true)}
-                            />
+            <div className="stock-main-layout standard-split">
+                
+                {/* LEFT COLUMN: Clean Visual Focus Frame */}
+                <section className="media-showcase layout-locked">
+                    <div className="main-display-box premium-shadow">
+                        {!isVideo ? (
+                            <div className="image-viewer-container">
+                                <img
+                                    src={selectedStock.image || "/assets/placeholder.jpeg"}
+                                    alt={selectedStock.title}
+                                    className="active-media image-clickable"
+                                    onClick={() => setIsLightboxOpen(true)}
+                                />
+                                <span className="zoom-hint">🔍 Click image to view raw texture detail</span>
+                            </div>
                         ) : (
                             <div className="video-player-wrapper">
                                 <video
-                                    key={currentMedia.url}
                                     ref={videoRef}
                                     autoPlay
                                     muted={isMuted}
@@ -94,102 +78,66 @@ const StockDetails = () => {
                                     playsInline
                                     className="active-media"
                                 >
-                                    <source src={currentMedia.url} type="video/mp4" />
-                                    Your browser does not support the video tag.
+                                    <source src={selectedStock.image} type="video/mp4" />
+                                    Your browser does not support HTML5 video playback loop.
                                 </video>
                                 <button
+                                    type="button"
                                     className="sound-toggle-btn"
                                     onClick={() => setIsMuted(!isMuted)}
                                 >
-                                    {isMuted ? "🔈 Tap to Unmute" : "🔊 Audio On"}
+                                    {isMuted ? "🔈 Unmute Fabric Loop" : "🔊 Audio On"}
                                 </button>
                             </div>
                         )}
                     </div>
-
-                    {/* Thumbnails Carousel Track */}
-                    <div className="thumbnails-track">
-                        {stockData.media.map((item, index) => (
-                            <button
-                                key={item.id}
-                                className={`thumb-card ${index === activeMediaIndex ? 'is-active' : ''}`}
-                                onClick={() => setActiveMediaIndex(index)}
-                            >
-                                {item.type === 'image' ? (
-                                    <img src={item.url} alt="Thumbnail preview" />
-                                ) : (
-                                    <div className="video-thumb-placeholder">
-                                        <span className="play-icon">▶</span>
-                                    </div>
-                                )}
-                            </button>
-                        ))}
-                    </div>
                 </section>
 
-                {/* RIGHT SIDE: Info Segment */}
-                <section className="info-specification">
-                    <h1 className="stock-main-title">{stockData.title}</h1>
-
-                    {/* Specifications Data Matrix */}
-                    <table className="specs-table">
-                        <tbody>
-                            <tr>
-                                <td className="spec-label">Brand</td>
-                                <td className="spec-val">{stockData.brand}</td>
-                            </tr>
-                            <tr>
-                                <td className="spec-label">Category</td>
-                                <td className="spec-val">{stockData.category}</td>
-                            </tr>
-                            <tr>
-                                <td className="spec-label">Fabric Material</td>
-                                <td className="spec-val">{stockData.fabric}</td>
-                            </tr>
-                            <tr>
-                                <td className="spec-label">Min. Order Qty (MOQ)</td>
-                                <td className="spec-val highlight-moq">{stockData.moq}</td>
-                            </tr>
-                            <tr>
-                                <td className="spec-label">Colours Available</td>
-                                <td className="spec-val">{stockData.colours}</td>
-                            </tr>
-                            <tr>
-                                <td className="spec-label">Size Ranges</td>
-                                <td className="spec-val">{stockData.sizeRange}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    {/* Description Paragraph Block */}
-                    <div className="description-wrapper">
-                        <h3>Product Architecture</h3>
-                        <p className="line-break-text">{stockData.description}</p>
+                {/* RIGHT COLUMN: Highly Detailed Specifications Stack */}
+                <section className="info-specification structured-panel">
+                    <div className="product-header">
+                        <div className="status-tags">
+                            <span className="export-badge premium-gold">✨ Verified Export Lot</span>
+                        </div>
+                        <h1 className="stock-main-title">{selectedStock.title}</h1>
                     </div>
 
-                    {/* Single Direct WhatsApp Call To Action */}
-                    <a
-                        href={whatsappLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inquire-wa-action-btn"
-                    >
-                        <img
-                            src="https://cdn-icons-png.flaticon.com/512/733/733585.png"
-                            alt="WhatsApp Icon"
-                            className="wa-btn-icon"
-                        ></img>
-                        Inquire on WhatsApp
-                    </a>
+                    {/* Lot Catalog Overview Narrative fetched dynamically from description column */}
+                    {selectedStock.description ? (
+                        <div className="description-wrapper refined-narrative-box">
+                            <h3>Full Commercial Description</h3>
+                            <p className="line-break-text">{selectedStock.description}</p>
+                        </div>
+                    ) : (
+                        <div className="description-wrapper refined-narrative-box">
+                            <h3>Full Commercial Description</h3>
+                            <p className="line-break-text" style={{ color: '#aaa', fontStyle: 'italic' }}>
+                                No product description provided for this catalog entry.
+                            </p>
+                        </div>
+                    )}
+
+                    {/* High-Impact Request Button */}
+                    <div className="action-footer-panel">
+                        <a
+                            href={whatsappLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="clean-text-action-btn"
+                        >
+                            Submit Bulk Inquiry & Get Price Quote
+                        </a>
+                        <p className="commercial-notice">⚡ Freight calculations, packing lists, and custom shipping details compiled instantly upon allocation lookup.</p>
+                    </div>
                 </section>
             </div>
 
-            {/* DESKTOP DESIRED LIGHTBOX VIEW */}
-            {isLightboxOpen && currentMedia.type === 'image' && (
+            {/* LIGHTBOX MODAL FRAME */}
+            {isLightboxOpen && !isVideo && (
                 <div className="lightbox-portal" onClick={() => setIsLightboxOpen(false)}>
                     <div className="lightbox-stage" onClick={(e) => e.stopPropagation()}>
-                        <button className="close-portal-btn" onClick={() => setIsLightboxOpen(false)}>×</button>
-                        <img src={currentMedia.url} alt="Expanded visual perspective" className="lightbox-img" />
+                        <button type="button" className="close-portal-btn" onClick={() => setIsLightboxOpen(false)}>×</button>
+                        <img src={selectedStock.image} alt={selectedStock.title} className="lightbox-img" />
                     </div>
                 </div>
             )}

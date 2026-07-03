@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
+import { createClient } from '@supabase/supabase-js'; 
 import './Welcome.css';
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 const Welcome = () => {
     const navigate = useNavigate();
-
 
     const headingOptions = [
         "New Arrivals: Global Drop '26",
@@ -16,9 +20,82 @@ const Welcome = () => {
     const [currentHeading, setCurrentHeading] = useState(headingOptions[0]);
     const [fadeState, setFadeState] = useState('fade-in');
     const [viewMode, setViewMode] = useState('storefront');
-
-    // Manage single active lookbook item slide index
     const [activeLookIndex, setActiveLookIndex] = useState(0);
+
+    const [newArrivals, setNewArrivals] = useState([]);
+    const [lookbookItems, setLookbookItems] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function fetchStorefrontData() {
+            try {
+                // 1. Fetch data from your 'products' table (only including valid columns)
+                const { data: productsData, error: productsError } = await supabase
+                    .from('products') 
+                    .select('id, title, tag, image_url, description'); // description added safely here
+
+                if (productsError) throw productsError;
+
+                if (productsData) {
+                    const mappedProducts = productsData.map(item => {
+                        let finalImageUrl = item.image_url;
+
+                        if (item.image_url && !item.image_url.startsWith('http')) {
+                            const { data } = supabase.storage
+                                .from('images')
+                                .getPublicUrl(item.image_url);
+                            
+                            finalImageUrl = data.publicUrl;
+                        }
+
+                        return {
+                            id: item.id,
+                            title: item.title,
+                            tag: item.tag || "New",
+                            image: finalImageUrl,
+                            description: item.description // Map description dynamically from the DB
+                        };
+                    });
+
+                    setNewArrivals(mappedProducts);
+                }
+
+                // 2. Fetch lookbook slider records from 'lookbook_table'
+                const { data: lookData, error: lookError } = await supabase
+                    .from('lookbook_table') 
+                    .select('title, description, image_url'); 
+
+                if (lookError) throw lookError;
+
+                if (lookData) {
+                    setLookbookItems(lookData.map(look => {
+                        let finalLookUrl = look.image_url;
+                        
+                        if (look.image_url && !look.image_url.startsWith('http')) {
+                            const { data } = supabase.storage
+                                .from('images')
+                                .getPublicUrl(look.image_url);
+                            
+                            finalLookUrl = data.publicUrl;
+                        }
+
+                        return {
+                            title: look.title,
+                            desc: look.description, 
+                            image: finalLookUrl
+                        };
+                    }));
+                }
+
+            } catch (error) {
+                console.error("Database connection error:", error.message);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        fetchStorefrontData();
+    }, []);
 
     useEffect(() => {
         if (viewMode !== 'storefront') return;
@@ -36,92 +113,25 @@ const Welcome = () => {
         return () => clearInterval(interval);
     }, [viewMode]);
 
-    // FIXED: Changed "src/assets/..." and object variables to static "/assets/..." paths
-    const newArrivals = [
-        {
-            id: 1,
-            title: "Classic Pure Linen Formal Shirt",
-            tag: "Best Seller",
-            image: "/assets/stock8.jpeg"
-        },
-        {
-            id: 2,
-            title: "Premium Cotton Classic Regular Shirt",
-            tag: "New",
-            image: "/assets/stock5.jpeg"
-        },
-        {
-            id: 3,
-            title: "Soft Cotton Casual Shirt",
-            tag: "Limited",
-            image: "/assets/stock12.jpeg"
-        },
-        {
-            id: 4,
-            title: "Classic Slim-fit Shirt",
-            tag: "Best Seller",
-            image: "/assets/stock6.jpeg"
-        }
-    ];
-
-    // FIXED: Changed all lookbook elements from "src/assets/..." to absolute "/assets/..." paths
-    const lookbookItems = [
-        {
-            title: "U.S. POLO ASSN",
-            desc: "Established United States Polo Association in 1890. Official lifestyle and sports-inspired brand. Offers apparel for men, women, and children. Blends timeless style with modern fashion trends.",
-            image: "/assets/stock13.jpeg"
-        },
-        {
-            title: "Christian Dior",
-            desc: "Premium luxury 100% genuine Textured Knit Fabric. Uses high-quality materials such as silk, wool, cashmere, cotton, linen, velvet fabric. Exceptional comfort and lasting Quality.",
-            image: "/assets/stock2.jpeg"
-        },
-        {
-            title: "Christian Dior",
-            desc: "Excellent Color retention and shape stability after proper care. Focus on elegant drape, refined texture and luxurious feel.",
-            image: "/assets/stock9.jpeg"
-        },
-        {
-            title: "Nike Jordan t-shirt",
-            desc: "Modern Athletic style with clean stitching and a premium finish. Export soft quality and durable fabric. Ethically sourced fibers that soften naturally over time with heavy industrial washes.",
-            image: "/assets/stock7.jpeg"
-        },
-        {
-            title: "Hackett London Cotton Polo shirt",
-            desc: "Classic British-inspired design with elegant checks, stripes, or solid colors. Suitable for business, smart casual and everyday wear.",
-            image: "/assets/stock4.jpeg"
-        },
-        {
-            title: "Lacoste Cotton Polo shirt",
-            desc: "450 GSM unbrushed loopback cotton providing an armor-like structural drop. Tailored dropped shoulders paired with clean seamless side hems.",
-            image: "/assets/stock3.jpeg"
-        },
-        {
-            title: "Rare Rabbit",
-            desc: "Premium Quality Turkish Linen Soft Hand Feel, Wash Soften Enzyme, Style Stiff Canvas Full Sleeves, 14 Colors Available, Size Available M,L,XL,XXL and Brand Packing Single Original Poly, 100% Good Quality.",
-            image: "/assets/stock10.jpeg"
-        },
-        {
-            title: "Nike Jordan Cotton t-shirt",
-            desc: "Crisp, cool luxury poplin fabric showcasing dropped architectural line silhouettes. Features extra-long plackets and clean premium collar stays.",
-            image: "/assets/stock11.jpeg"
-        }
-    ];
-
     const nextLook = () => {
+        if (lookbookItems.length === 0) return;
         setActiveLookIndex((prev) => (prev + 1) % lookbookItems.length);
     };
 
     const prevLook = () => {
+        if (lookbookItems.length === 0) return;
         setActiveLookIndex((prev) => (prev - 1 + lookbookItems.length) % lookbookItems.length);
     };
 
     const currentLook = lookbookItems[activeLookIndex];
 
+    if (loading) {
+        return <div className="storefront-container" style={{ color: '#fff', padding: '3rem' }}>Syncing with Storefront...</div>;
+    }
+
     return (
         <div className="storefront-container">
             {viewMode === 'storefront' ? (
-                /* --- ULTRA CLEAN CATALOG VIEW --- */
                 <div className="view-fade-wrapper">
                     <header className="hero-banner">
                         <div className="hero-overlay">
@@ -149,19 +159,13 @@ const Welcome = () => {
                                     onClick={() =>
                                         navigate("/StockDetails", {
                                             state: {
-                                                image: item.image,
+                                                image: item.image, 
                                                 title: item.title,
                                                 tag: item.tag,
+                                                description: item.description // Forwarding description to details page
                                             },
                                         })
                                     }
-
-
-
-
-
-
-
                                 >
                                     <div className="image-wrapper">
                                         <span className="product-badge">{item.tag}</span>
@@ -176,9 +180,7 @@ const Welcome = () => {
                     </section>
                 </div>
             ) : (
-                /* --- FULL SCREEN MAGAZINE-STYLE IMMERSIVE LOOKBOOK --- */
                 <div className="fullscreen-lookbook-view">
-                    {/* Header Action Row */}
                     <div className="lookbook-top-bar">
                         <button className="minimal-close-btn" onClick={() => setViewMode('storefront')}>
                             ✕ Close
@@ -188,22 +190,24 @@ const Welcome = () => {
                         </div>
                     </div>
 
-                    {/* Main Fullscreen Stage Frame */}
-                    <div className="lookbook-magazine-stage" key={activeLookIndex}>
-                        <div className="magazine-media-pane">
-                            <img src={currentLook.image} alt={currentLook.title} className="magazine-img" />
-                        </div>
+                    {currentLook ? (
+                        <div className="lookbook-magazine-stage" key={activeLookIndex}>
+                            <div className="magazine-media-pane">
+                                <img src={currentLook.image} alt={currentLook.title} className="magazine-img" />
+                            </div>
 
-                        <div className="magazine-content-pane">
-                            <div className="content-inner-wrapper">
-                                <span className="textile-spec-badge">TEXTILE SPECIFICATION</span>
-                                <h1 className="magazine-cloth-title">{currentLook.title}</h1>
-                                <p className="magazine-cloth-desc">{currentLook.desc}</p>
+                            <div className="magazine-content-pane">
+                                <div className="content-inner-wrapper">
+                                    <span className="textile-spec-badge">TEXTILE SPECIFICATION</span>
+                                    <h1 className="magazine-cloth-title">{currentLook.title}</h1>
+                                    <p className="magazine-cloth-desc">{currentLook.desc}</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    ) : (
+                        <div style={{ color: '#fff', textAlign: 'center', marginTop: '20vh' }}>No Lookbook entries setup.</div>
+                    )}
 
-                    {/* Left & Right Absolute Navigation Controls */}
                     <button className="nav-arrow-control prev-arrow" onClick={prevLook} aria-label="Previous look">
                         ‹
                     </button>
