@@ -63,7 +63,7 @@ export default function ClientsPage() {
 
         <div className="cta-band">
           <h2>Join our global buyer network</h2>
-          <p>Start with a single lot — scale as you grow.</p>
+          <p>Start with a single lot - scale as you grow.</p>
           <Link href="/catalog" className="btn btn-primary">Browse Catalog</Link>
         </div>
       </div>

@@ -10,7 +10,7 @@ const Footer = () => {
         <div className="footer-brand">
           <span className="footer-logo">Rashi Worldwide</span>
           <p className="footer-blurb">
-            Elite apparel exporter — premium manufacturing, verified export lots,
+            Elite apparel exporter - premium manufacturing, verified export lots,
             and reliable worldwide logistics.
           </p>
         </div>

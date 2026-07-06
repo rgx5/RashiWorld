@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Rashi Worldwide — Global Theme
+   Rashi Worldwide - Global Theme
    Premium minimal: white canvas, ink text, orange accent.
    Single source of truth for design tokens. Imported once in App.jsx.
    ========================================================================== */
@@ -16,21 +16,31 @@
   --brand-ring: rgba(232, 77, 14, 0.35);
 
   /* Ink / neutrals */
-  --ink: #141414;          /* headings / near-black */
-  --ink-2: #2A2A2A;        /* strong body */
-  --text: #4A4A4A;         /* body text */
-  --muted: #8A8A8A;        /* secondary text */
-  --faint: #B4B4B4;        /* tertiary / disabled */
+  --ink: #141414;
+  /* headings / near-black */
+  --ink-2: #2A2A2A;
+  /* strong body */
+  --text: #4A4A4A;
+  /* body text */
+  --muted: #8A8A8A;
+  /* secondary text */
+  --faint: #B4B4B4;
+  /* tertiary / disabled */
 
   /* Surfaces */
-  --bg: #FFFFFF;           /* page */
-  --surface: #FFFFFF;      /* cards */
-  --surface-2: #FAFAFA;    /* subtle panels */
-  --border: #ECECEC;       /* hairlines */
+  --bg: #FFFFFF;
+  /* page */
+  --surface: #FFFFFF;
+  /* cards */
+  --surface-2: #FAFAFA;
+  /* subtle panels */
+  --border: #ECECEC;
+  /* hairlines */
   --border-strong: #DADADA;
 
   /* Utility */
-  --success: #25D366;      /* whatsapp green */
+  --success: #25D366;
+  /* whatsapp green */
   --danger: #C0392B;
 
   /* Radius */
@@ -78,7 +88,10 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
   color: var(--ink);
   font-weight: 600;
   line-height: 1.2;
@@ -86,11 +99,18 @@ h1, h2, h3, h4 {
   margin: 0;
 }
 
-p { margin: 0; }
+p {
+  margin: 0;
+}
 
-a { color: inherit; }
+a {
+  color: inherit;
+}
 
-img { max-width: 100%; display: block; }
+img {
+  max-width: 100%;
+  display: block;
+}
 
 button {
   font-family: inherit;
@@ -120,48 +140,55 @@ button {
   cursor: pointer;
   text-decoration: none;
   transition: background var(--t-fast), color var(--t-fast),
-              border-color var(--t-fast), transform var(--t-fast),
-              box-shadow var(--t-fast);
+    border-color var(--t-fast), transform var(--t-fast),
+    box-shadow var(--t-fast);
   white-space: nowrap;
 }
 
-.btn:active { transform: translateY(1px); }
+.btn:active {
+  transform: translateY(1px);
+}
 
-/* Primary — orange */
+/* Primary - orange */
 .btn-primary {
   background: var(--brand);
   color: #fff;
   box-shadow: 0 6px 16px -6px var(--brand-ring);
 }
+
 .btn-primary:hover {
   background: var(--brand-hover);
   transform: translateY(-2px);
   box-shadow: 0 10px 22px -8px var(--brand-ring);
 }
 
-/* Dark — ink */
+/* Dark - ink */
 .btn-dark {
   background: var(--ink);
   color: #fff;
 }
+
 .btn-dark:hover {
   background: #000;
   transform: translateY(-2px);
 }
 
-/* Secondary — outline */
+/* Secondary - outline */
 .btn-outline {
   background: transparent;
   color: var(--ink);
   border-color: var(--border-strong);
 }
+
 .btn-outline:hover {
   border-color: var(--brand);
   color: var(--brand);
   background: var(--brand-soft);
 }
 
-.btn-block { width: 100%; }
+.btn-block {
+  width: 100%;
+}
 
 /* ==========================================================================
    Skeleton loading shimmer
@@ -172,6 +199,7 @@ button {
   background: #f0f0f0;
   border-radius: var(--r-sm);
 }
+
 .skeleton::after {
   content: '';
   position: absolute;
@@ -180,8 +208,11 @@ button {
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.7), transparent);
   animation: skeleton-shimmer 1.4s infinite;
 }
+
 @keyframes skeleton-shimmer {
-  100% { transform: translateX(100%); }
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 /* ==========================================================================
@@ -197,7 +228,10 @@ button {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

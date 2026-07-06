@@ -53,7 +53,7 @@ const Storefront = ({ initialStocks = [] }) => {
     return (
       <section className="catalog-section empty-state" style={{ margin: '2rem auto 4rem' }}>
         <h2>New stock lots are being added</h2>
-        <p>Our catalog updates regularly — message us directly and we&apos;ll confirm current availability for your requirement.</p>
+        <p>Our catalog updates regularly - message us directly and we&apos;ll confirm current availability for your requirement.</p>
         <a
           href={`https://wa.me/${SITE.whatsapp}`}
           target="_blank"

@@ -22,7 +22,7 @@ export async function generateMetadata({ params }) {
   const title = stock.title || 'Export Lot';
   const description =
     (stock.description && stock.description.slice(0, 155)) ||
-    `${title} — verified export lot from Rashi Worldwide.${stock.moq ? ` MOQ: ${stock.moq}.` : ''}`;
+    `${title} - verified export lot from Rashi Worldwide.${stock.moq ? ` MOQ: ${stock.moq}.` : ''}`;
   const url = `/stockDetails/${slug}`;
   const image = stock.image && stock.image.startsWith('http') ? stock.image : SITE.ogImage;
 
@@ -52,7 +52,7 @@ function productJsonLd(stock, slug) {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: stock.title,
-    description: stock.description || `${stock.title} — verified export lot from Rashi Worldwide.`,
+    description: stock.description || `${stock.title} - verified export lot from Rashi Worldwide.`,
     image: [image],
     sku: String(stock.id ?? slug),
     ...(stock.brand ? { brand: { '@type': 'Brand', name: stock.brand } } : {}),

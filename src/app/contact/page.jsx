@@ -4,7 +4,7 @@ import '@/styles/contact.css';
 export const metadata = {
   title: 'Contact',
   description:
-    'Get in touch with Rashi Worldwide for bulk apparel export enquiries — WhatsApp, Instagram or direct call. Secure B2B distribution, no forms required.',
+    'Get in touch with Rashi Worldwide for bulk apparel export enquiries - WhatsApp, Instagram or direct call. Secure B2B distribution, no forms required.',
   alternates: { canonical: '/contact' },
   openGraph: {
     title: 'Contact | Rashi Worldwide',

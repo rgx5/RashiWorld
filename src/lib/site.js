@@ -6,9 +6,9 @@ export const SITE_URL = (
 export const SITE = {
   name: 'Rashi Worldwide',
   shortName: 'Rashi Worldwide',
-  title: 'Rashi Worldwide — Premium Apparel Export',
+  title: 'Rashi Worldwide - Premium Apparel Export',
   description:
-    'Rashi Worldwide is an elite apparel exporter — premium manufacturing, verified export lots, private-label / OEM production and reliable worldwide logistics.',
+    'Rashi Worldwide is an elite apparel exporter - premium manufacturing, verified export lots, private-label / OEM production and reliable worldwide logistics.',
   url: SITE_URL,
   locale: 'en_US',
   ogImage: '/logo.jpg',

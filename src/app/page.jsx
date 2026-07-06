@@ -11,9 +11,9 @@ import '@/styles/static-page.css';
 export const revalidate = 300;
 
 export const metadata = {
-  title: 'Rashi Worldwide — Premium Apparel Export',
+  title: 'Rashi Worldwide - Premium Apparel Export',
   description:
-    'Discover verified export lots from Rashi Worldwide — premium apparel manufacturing, private-label / OEM production and reliable worldwide logistics.',
+    'Discover verified export lots from Rashi Worldwide - premium apparel manufacturing, private-label / OEM production and reliable worldwide logistics.',
   alternates: { canonical: '/' },
 };
 
@@ -28,12 +28,12 @@ const Icon = ({ children }) => (
 const valueProps = [
   {
     title: 'Verified Export Lots',
-    desc: 'Every lot is inspected and documented before it\'s listed — what you see is what ships.',
+    desc: 'Every lot is inspected and documented before it\'s listed - what you see is what ships.',
     icon: <><path d="M9 12l2 2 4-4" /><path d="M12 3l7 3v6c0 5-3.5 8-7 9-3.5-1-7-4-7-9V6l7-3z" /></>,
   },
   {
     title: 'Private Label & OEM',
-    desc: 'Custom manufacturing to your brand spec — labels, tags, and packaging included.',
+    desc: 'Custom manufacturing to your brand spec - labels, tags, and packaging included.',
     icon: <><path d="M20.59 13.41 13.42 20.6a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" /><circle cx="7" cy="7" r="1.5" /></>,
   },
   {
@@ -61,10 +61,10 @@ export default async function HomePage() {
 
   return (
     <>
-      {/* Hero — slider fed from the admin dashboard, static fallback if empty */}
+      {/* Hero - slider fed from the admin dashboard, static fallback if empty */}
       <HeroSlider slides={heroSlides} />
 
-      {/* Static value propositions — always render, independent of live stock */}
+      {/* Static value propositions - always render, independent of live stock */}
       <section className="value-props-section">
         <div className="static-body">
           <h2 className="section-title">Why Rashi Worldwide</h2>
@@ -81,7 +81,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Live product grid — one section of the page, not the whole page */}
+      {/* Live product grid - one section of the page, not the whole page */}
       <Storefront initialStocks={stocks} />
 
       <div className="static-body">

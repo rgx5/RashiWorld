@@ -14,7 +14,7 @@ const AdminDashboard = () => {
     const [stockItems, setStockItems] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
-    // Hero slider — images shown in rotation on the public homepage banner
+    // Hero slider - images shown in rotation on the public homepage banner
     const [heroSlides, setHeroSlides] = useState([]);
     const [isHeroLoading, setIsHeroLoading] = useState(false);
     const [isUploadingHero, setIsUploadingHero] = useState(false);
@@ -222,7 +222,7 @@ const AdminDashboard = () => {
         setIsUploadingHero(true);
         try {
             // Downscale + re-encode to WebP client-side before it ever hits
-            // storage — cuts upload size (and future bandwidth) with no
+            // storage - cuts upload size (and future bandwidth) with no
             // visible quality loss.
             const files = await compressImages(rawFiles, { maxDimension: 1920, quality: 0.85 });
 
@@ -420,7 +420,7 @@ const AdminDashboard = () => {
                                     ))}
                                 </div>
                             ) : (
-                                <p className="panel-helper-text">No custom slides yet — the homepage is showing the default image.</p>
+                                <p className="panel-helper-text">No custom slides yet - the homepage is showing the default image.</p>
                             )}
                         </div>
                     )}

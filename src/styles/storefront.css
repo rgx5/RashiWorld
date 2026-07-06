@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Storefront (Welcome) — premium minimal. Tokens from theme.css.
+   Storefront (Welcome) - premium minimal. Tokens from theme.css.
    ========================================================================== */
 .storefront-container {
   background: var(--bg);
@@ -8,7 +8,7 @@
 }
 
 /* ==========================================================================
-   Hero — crossfading slider with static-image fallback
+   Hero - crossfading slider with static-image fallback
    ========================================================================== */
 .hero-banner {
   position: relative;
@@ -183,7 +183,7 @@
   transform: translateY(6px);
 }
 
-/* Grid — mobile-first single column */
+/* Grid - mobile-first single column */
 .products-grid {
   display: grid;
   grid-template-columns: 1fr;
