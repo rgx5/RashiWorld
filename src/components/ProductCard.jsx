@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 /**
  * Reusable storefront/catalog product card.
@@ -14,7 +15,14 @@ const ProductCard = ({ item, index = 0 }) => {
       <div className="image-wrapper">
         <span className="product-badge">{item.brand || item.category || 'New'}</span>
         {item.image && (
-          <img src={item.image} alt={item.title} className="product-img" loading="lazy" />
+          <Image
+            src={item.image}
+            alt={item.title}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            quality={82}
+            className="product-img"
+          />
         )}
       </div>
       <div className="product-details">

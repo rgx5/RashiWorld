@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import ProductCard from './ProductCard';
 import { SITE } from '@/lib/site';
 import '@/styles/storefront.css';
@@ -112,7 +113,14 @@ const Storefront = ({ initialStocks = [] }) => {
           {currentStockLook ? (
             <div className="lookbook-magazine-stage" key={activeStockIndex}>
               <div className="magazine-media-pane">
-                <img src={currentStockLook.image} alt={currentStockLook.title} className="magazine-img" />
+                <Image
+                  src={currentStockLook.image}
+                  alt={currentStockLook.title}
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  quality={82}
+                  className="magazine-img"
+                />
               </div>
               <div className="magazine-content-pane">
                 <div className="content-inner-wrapper">

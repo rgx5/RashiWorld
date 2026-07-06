@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { SITE } from '@/lib/site';
 
 const HeroSlider = ({ slides }) => {
@@ -22,11 +23,17 @@ const HeroSlider = ({ slides }) => {
     <header className="hero-banner">
       <div className="hero-slides">
         {slides.map((slide, i) => (
-          <div
-            key={slide.id}
-            className={`hero-slide ${i === index ? 'is-active' : ''}`}
-            style={{ backgroundImage: `url(${slide.image})` }}
-          />
+          <div key={slide.id} className={`hero-slide ${i === index ? 'is-active' : ''}`}>
+            <Image
+              src={slide.image}
+              alt=""
+              fill
+              sizes="100vw"
+              quality={82}
+              priority={i === 0}
+              style={{ objectFit: 'cover' }}
+            />
+          </div>
         ))}
         <div className="hero-scrim" />
       </div>

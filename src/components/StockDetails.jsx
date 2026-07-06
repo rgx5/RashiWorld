@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { SITE } from '@/lib/site';
 import '@/styles/stock-details.css';
 
@@ -110,7 +111,15 @@ const StockDetails = ({ stock }) => {
 
             {!isVideo ? (
               <div className="image-viewer-container" onClick={() => setIsLightboxOpen(true)} style={{ cursor: 'pointer' }}>
-                <img src={activeMedia} alt={selectedStock.title} className="active-media image-fade" key={activeMedia} />
+                <Image
+                  src={activeMedia}
+                  alt={selectedStock.title}
+                  fill
+                  sizes="(max-width: 900px) 100vw, 50vw"
+                  quality={85}
+                  className="active-media image-fade"
+                  key={activeMedia}
+                />
               </div>
             ) : (
               <div className="video-player-wrapper" style={{ width: '100%', height: '100%', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#000' }}>
@@ -152,7 +161,14 @@ const StockDetails = ({ stock }) => {
                     {isThumbVideo ? (
                       <div className="video-thumb-placeholder">▶ Video</div>
                     ) : (
-                      <img src={mediaUrl} alt={`View ${index + 1}`} className="gallery-thumb-img" />
+                      <Image
+                        src={mediaUrl}
+                        alt={`View ${index + 1}`}
+                        width={72}
+                        height={72}
+                        quality={70}
+                        className="gallery-thumb-img"
+                      />
                     )}
                   </div>
                 );

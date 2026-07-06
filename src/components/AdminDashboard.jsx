@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import AdminLogin from './AdminLogin';
 import '@/styles/admin-dashboard.css';
 import { supabase } from '@/lib/supabaseClient';
+import { compressImages } from '@/lib/imageCompress';
 
 const AdminDashboard = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -215,11 +216,16 @@ const AdminDashboard = () => {
 
     // CREATE (upload image(s) to storage, then insert row per slide)
     const handleHeroUpload = async (e) => {
-        const files = Array.from(e.target.files || []);
-        if (files.length === 0) return;
+        const rawFiles = Array.from(e.target.files || []);
+        if (rawFiles.length === 0) return;
 
         setIsUploadingHero(true);
         try {
+            // Downscale + re-encode to WebP client-side before it ever hits
+            // storage — cuts upload size (and future bandwidth) with no
+            // visible quality loss.
+            const files = await compressImages(rawFiles, { maxDimension: 1920, quality: 0.85 });
+
             let nextOrder = heroSlides.length > 0
                 ? Math.max(...heroSlides.map(s => s.sort_order ?? 0)) + 1
                 : 0;
