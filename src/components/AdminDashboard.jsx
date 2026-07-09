@@ -19,18 +19,21 @@ const AdminDashboard = () => {
     const [isHeroLoading, setIsHeroLoading] = useState(false);
     const [isUploadingHero, setIsUploadingHero] = useState(false);
 
-    // Form inputs streamlined to map directly to your 4 schema columns
+    // Form inputs mapped to all stock schema columns
     const [newStock, setNewStock] = useState({
-        title: '',
-        brand: '',
-        status: 'Active',
-        expiry: '',
+        title: '', brand: '', status: 'active', expiry_date: '',
+        category: '', description: '', colors: '', sizes: '', moq: '', fabric: '', video_url: ''
     });
+    const [newStockImages, setNewStockImages] = useState([]);
+    const [newStockVideo, setNewStockVideo] = useState(null);
+    const [editImages, setEditImages] = useState([]);
+    const [editVideo, setEditVideo] = useState(null);
 
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [editingItem, setEditingItem] = useState(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [itemToDelete, setItemToDelete] = useState(null); // Holds the string "title"
+    const [isAddFormOpen, setIsAddFormOpen] = useState(false);
 
     const [globalSettings, setGlobalSettings] = useState({
         brandName: "Rashi Worldwide",
@@ -91,35 +94,81 @@ const AdminDashboard = () => {
     // CREATE
     const handleAddStock = async (e) => {
         e.preventDefault();
-        if (!newStock.title || !newStock.brand) {
-            return alert("Product Title and Brand are required by your database schema.");
+        if (!newStock.title) {
+            return alert("Product Title is required.");
         }
+
+        const generatedSlug = newStock.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+
+        let uploadedPhotos = [];
+        let uploadedVideoUrl = newStock.video_url || null;
+
+        if (newStockImages.length > 0) {
+            setIsLoading(true);
+            try {
+                const files = await compressImages(newStockImages, { maxDimension: 1920, quality: 0.85 });
+                for (const file of files) {
+                    const path = `stocks/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.\-_]/g, '')}`;
+                    const { error: uploadError } = await supabase.storage.from('images').upload(path, file);
+                    if (!uploadError) uploadedPhotos.push(path);
+                }
+            } catch (err) {
+                console.error("Photos upload error:", err);
+            }
+            setIsLoading(false);
+        }
+
+        if (newStockVideo) {
+            setIsLoading(true);
+            try {
+                const path = `stocks/videos/${Date.now()}-${newStockVideo.name.replace(/[^a-zA-Z0-9.\-_]/g, '')}`;
+                const { error: uploadError } = await supabase.storage.from('images').upload(path, newStockVideo);
+                if (!uploadError) {
+                    const { data } = supabase.storage.from('images').getPublicUrl(path);
+                    uploadedVideoUrl = data.publicUrl;
+                }
+            } catch (err) {
+                console.error("Video upload error:", err);
+            }
+            setIsLoading(false);
+        }
+
+        const colorsArray = typeof newStock.colors === 'string' && newStock.colors.trim() !== ''
+            ? newStock.colors.split(',').map(s => s.trim()).filter(Boolean)
+            : newStock.colors || null;
+
+        const sizesArray = typeof newStock.sizes === 'string' && newStock.sizes.trim() !== ''
+            ? newStock.sizes.split(',').map(s => s.trim()).filter(Boolean)
+            : newStock.sizes || null;
 
         const { data, error } = await supabase
             .from('stocks')
-            .insert([
-                {
-                    title: newStock.title,
-                    brand: newStock.brand,
-                    status: newStock.status,
-                    expiry: newStock.expiry || null
-                }
-            ])
-            .select();
+            .insert([{
+                title: newStock.title, slug: generatedSlug, brand: newStock.brand || null,
+                status: newStock.status, expiry_date: newStock.expiry_date || null,
+                category: newStock.category || null, description: newStock.description || null,
+                colors: colorsArray, sizes: sizesArray,
+                moq: newStock.moq || null, fabric: newStock.fabric || null,
+                video_url: uploadedVideoUrl,
+                photos: uploadedPhotos.length > 0 ? uploadedPhotos : null,
+            }]).select();
 
         if (error) {
             console.error("Error inserting data:", error.message);
             alert("Failed to add entry: " + error.message);
         } else {
             if (data && data.length > 0) setStockItems(prev => [data[0], ...prev]);
-            // Reset state
-            setNewStock({ title: '', brand: '', status: 'Active', expiry: '' });
+            setNewStock({ title: '', brand: '', status: 'active', expiry_date: '', category: '', description: '', colors: '', sizes: '', moq: '', fabric: '', video_url: '' });
+            setNewStockImages([]);
+            setNewStockVideo(null);
+            e.target.reset();
+            setIsAddFormOpen(false);
         }
     };
 
     // UPDATE (Visibility Switcher)
     const handleToggleVisibility = async (productTitle, currentStatus) => {
-        const nextStatus = currentStatus === 'Active' ? 'Hidden' : 'Active';
+        const nextStatus = currentStatus === 'active' ? 'hidden' : 'active';
 
         const { error } = await supabase
             .from('stocks')
@@ -138,13 +187,66 @@ const AdminDashboard = () => {
     const handleSaveEdit = async (e) => {
         e.preventDefault();
 
+        let newUploadedPhotos = [];
+        let newUploadedVideoUrl = editingItem.video_url;
+
+        if (editImages && editImages.length > 0) {
+            setIsLoading(true);
+            try {
+                const files = await compressImages(editImages, { maxDimension: 1920, quality: 0.85 });
+                for (const file of files) {
+                    const path = `stocks/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.\-_]/g, '')}`;
+                    const { error: uploadError } = await supabase.storage.from('images').upload(path, file);
+                    if (!uploadError) newUploadedPhotos.push(path);
+                }
+            } catch (err) {
+                console.error("Photos upload error:", err);
+            }
+            setIsLoading(false);
+        }
+
+        if (editVideo) {
+            setIsLoading(true);
+            try {
+                const path = `stocks/videos/${Date.now()}-${editVideo.name.replace(/[^a-zA-Z0-9.\-_]/g, '')}`;
+                const { error: uploadError } = await supabase.storage.from('images').upload(path, editVideo);
+                if (!uploadError) {
+                    const { data } = supabase.storage.from('images').getPublicUrl(path);
+                    newUploadedVideoUrl = data.publicUrl;
+                }
+            } catch (err) {
+                console.error("Video upload error:", err);
+            }
+            setIsLoading(false);
+        }
+
+        const parseArray = (val) => {
+            if (Array.isArray(val)) return val;
+            if (typeof val === 'string' && val.trim() !== '') return val.split(',').map(s => s.trim()).filter(Boolean);
+            return null;
+        };
+
+        const updatedData = {
+            brand: editingItem.brand || null,
+            status: editingItem.status,
+            expiry_date: editingItem.expiry_date || null,
+            category: editingItem.category || null,
+            description: editingItem.description || null,
+            colors: parseArray(editingItem.colors),
+            sizes: parseArray(editingItem.sizes),
+            moq: editingItem.moq || null,
+            fabric: editingItem.fabric || null,
+            video_url: newUploadedVideoUrl || null,
+        };
+
+        if (newUploadedPhotos.length > 0) {
+            updatedData.photos = newUploadedPhotos;
+            editingItem.photos = newUploadedPhotos;
+        }
+
         const { error } = await supabase
             .from('stocks')
-            .update({
-                brand: editingItem.brand,
-                status: editingItem.status,
-                expiry: editingItem.expiry || null,
-            })
+            .update(updatedData)
             .eq('title', editingItem.title); // Matches using exact primary key string
 
         if (error) {
@@ -154,6 +256,8 @@ const AdminDashboard = () => {
             setStockItems(prev => prev.map(item => item.title === editingItem.title ? editingItem : item));
             setIsEditModalOpen(false);
             setEditingItem(null);
+            setEditImages([]);
+            setEditVideo(null);
         }
     };
 
@@ -166,7 +270,7 @@ const AdminDashboard = () => {
 
         if (error) {
             console.error("Error deleting data:", error.message);
-            alert("Failed to clear database record: " + error.message);
+            alert("Failed to clear record: " + error.message);
         } else {
             setStockItems(prev => prev.filter(item => item.title !== itemToDelete));
             setIsDeleteModalOpen(false);
@@ -186,7 +290,7 @@ const AdminDashboard = () => {
         setGlobalSettings(prev => ({ ...prev, [name]: value }));
     };
 
-    const openEditModal = (item) => { setEditingItem({ ...item }); setIsEditModalOpen(true); };
+    const openEditModal = (item) => { setEditingItem({ ...item }); setEditImages([]); setIsEditModalOpen(true); };
     const openDeleteModal = (productTitle) => { setItemToDelete(productTitle); setIsDeleteModalOpen(true); };
 
     // --- HERO SLIDER (public homepage banner) ---
@@ -275,10 +379,10 @@ const AdminDashboard = () => {
     };
 
     const getStatusBadge = (item) => {
-        if (item.status === 'Hidden') return <span className="status-badge badge-hidden">Hidden</span>;
-        if (!item.expiry) return <span className="status-badge badge-active">Active</span>;
+        if (item.status === 'hidden') return <span className="status-badge badge-hidden">Hidden</span>;
+        if (!item.expiry_date) return <span className="status-badge badge-active">Active</span>;
 
-        const diffDays = Math.ceil((new Date(item.expiry) - new Date()) / (1000 * 3600 * 24));
+        const diffDays = Math.ceil((new Date(item.expiry_date) - new Date()) / (1000 * 3600 * 24));
         if (diffDays >= 0 && diffDays <= 3) {
             return <span className="status-badge badge-expiring"><span className="pulse-dot"></span>Expiring Soon</span>;
         }
@@ -296,13 +400,7 @@ const AdminDashboard = () => {
         <div className="admin-dashboard-container">
             <aside className="admin-sidebar">
                 <div className="sidebar-top">
-                    <div className="admin-brand-zone">
-                        <div className="admin-logo">R</div>
-                        <div>
-                            <h3>Admin Dashboard</h3>
-                            <p>Rashi Worldwide</p>
-                        </div>
-                    </div>
+
 
                     <nav className="admin-nav-menu">
                         <button className={`nav-btn ${activeTab === 'stock-crud' ? 'is-active' : ''}`} onClick={() => setActiveTab('stock-crud')}>
@@ -322,19 +420,43 @@ const AdminDashboard = () => {
                 </div>
             </aside>
 
+            {/* MOBILE BOTTOM NAVBAR */}
+            <nav className="mobile-bottom-nav">
+                <button className={`mobile-nav-btn ${activeTab === 'stock-crud' ? 'is-active' : ''}`} onClick={() => setActiveTab('stock-crud')}>
+                    <span className="icon">📦</span>
+                    <span>Catalog</span>
+                </button>
+                <button className={`mobile-nav-btn ${activeTab === 'hero-slider' ? 'is-active' : ''}`} onClick={() => setActiveTab('hero-slider')}>
+                    <span className="icon">🖼️</span>
+                    <span>Slider</span>
+                </button>
+                <button className={`mobile-nav-btn ${activeTab === 'global-settings' ? 'is-active' : ''}`} onClick={() => setActiveTab('global-settings')}>
+                    <span className="icon">⚙️</span>
+                    <span>Config</span>
+                </button>
+                <button className="mobile-nav-btn logout-btn-style" onClick={handleLogout}>
+                    <span className="icon">🚪</span>
+                    <span>Exit</span>
+                </button>
+            </nav>
+
             <main className="admin-main-viewport">
                 <header className="viewport-header">
                     <h2>{activeTab.replace('-', ' ').toUpperCase()}</h2>
-                    <span className="secure-badge">Database Live</span>
                 </header>
 
                 <div key={activeTab} className="panel-fade-in">
                     {activeTab === 'stock-crud' && (
                         <>
                             <section className="surface-card mt-6">
-                                <h3>Active Catalog ({stockItems.length})</h3>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                                    <h3 style={{ margin: 0 }}>Active Catalog ({stockItems.length})</h3>
+                                    <button className="admin-action-btn primary-btn" onClick={() => setIsAddFormOpen(true)}>
+                                        + Add New
+                                    </button>
+                                </div>
                                 {isLoading ? (
-                                    <p style={{ padding: '1rem', color: '#888' }}>Syncing with Supabase Ledger...</p>
+                                    <p style={{ padding: '1rem', color: '#888' }}>Loading</p>
                                 ) : (
                                     <div className="table-overflow-container">
                                         <table className="admin-crud-table">
@@ -349,10 +471,10 @@ const AdminDashboard = () => {
                                                         <td><div className="font-bold">{item.title}</div></td>
                                                         <td><span className="category-tag">{item.brand || "General"}</span></td>
                                                         <td>{getStatusBadge(item)}</td>
-                                                        <td className="font-mono text-muted">{item.expiry || 'N/A'}</td>
+                                                        <td className="font-mono text-muted">{item.expiry_date || 'N/A'}</td>
                                                         <td className="actions-cell">
                                                             <button className="action-icon-btn" onClick={() => openEditModal(item)}>Edit</button>
-                                                            <button className="action-icon-btn" onClick={() => handleToggleVisibility(item.title, item.status)}>{item.status === 'Active' ? 'Hide' : 'Show'}</button>
+                                                            <button className="action-icon-btn" onClick={() => handleToggleVisibility(item.title, item.status)}>{item.status === 'active' ? 'Hide' : 'Show'}</button>
                                                             <button className="action-icon-btn delete" onClick={() => openDeleteModal(item.title)}>Delete</button>
                                                         </td>
                                                     </tr>
@@ -366,17 +488,6 @@ const AdminDashboard = () => {
                                         </table>
                                     </div>
                                 )}
-                            </section>
-
-                            <section className="surface-card">
-                                <h3>Publish New Stock Entry</h3>
-                                <form onSubmit={handleAddStock} className="crud-grid-form">
-                                    <div className="input-group full-width"><label>Stock Line Title *</label><input type="text" name="title" value={newStock.title} onChange={handleInputChange} placeholder="e.g., Silk Slip Dress Collection" required /></div>
-                                    <div className="input-group"><label>Brand *</label><input type="text" name="brand" value={newStock.brand} onChange={handleInputChange} placeholder="e.g., Nike, Zara..." required /></div>
-                                    <div className="input-group"><label>Expiry Date</label><input type="date" name="expiry" value={newStock.expiry} onChange={handleInputChange} /></div>
-
-                                    <div className="full-width"><button type="submit" className="admin-action-btn primary-btn">Save to Supabase</button></div>
-                                </form>
                             </section>
                         </>
                     )}
@@ -443,6 +554,32 @@ const AdminDashboard = () => {
             </main>
 
             {/* MODALS */}
+            {isAddFormOpen && (
+                <div className="dashboard-modal-overlay">
+                    <div className="dashboard-modal-card">
+                        <h3>New Entry</h3>
+                        <form onSubmit={handleAddStock} className="crud-grid-form mt-4">
+                            <div className="input-group"><label>Stock Line Title *</label><input type="text" name="title" value={newStock.title} onChange={handleInputChange} placeholder="e.g., Silk Slip Dress Collection" required /></div>
+                            <div className="input-group"><label>Brand</label><input type="text" name="brand" value={newStock.brand} onChange={handleInputChange} placeholder="e.g., Nike, Zara..." /></div>
+                            <div className="input-group"><label>Category</label><input type="text" name="category" value={newStock.category} onChange={handleInputChange} placeholder="e.g., Dresses" /></div>
+                            <div className="input-group"><label>Expiry Date</label><input type="date" name="expiry_date" value={newStock.expiry_date} onChange={handleInputChange} /></div>
+                            <div className="input-group"><label>Colors (comma sep)</label><input type="text" name="colors" value={newStock.colors} onChange={handleInputChange} placeholder="Red, Blue" /></div>
+                            <div className="input-group"><label>Sizes (comma sep)</label><input type="text" name="sizes" value={newStock.sizes} onChange={handleInputChange} placeholder="S, M, L" /></div>
+                            <div className="input-group"><label>MOQ</label><input type="text" name="moq" value={newStock.moq} onChange={handleInputChange} placeholder="e.g., 50" /></div>
+                            <div className="input-group"><label>Fabric</label><input type="text" name="fabric" value={newStock.fabric} onChange={handleInputChange} placeholder="e.g., Silk" /></div>
+                            <div className="input-group full-width"><label>Product Video</label><input type="file" accept="video/*" onChange={(e) => setNewStockVideo(e.target.files[0] || null)} /></div>
+                            <div className="input-group full-width"><label>Description</label><textarea name="description" value={newStock.description} onChange={handleInputChange} placeholder="Product description..." rows="3"></textarea></div>
+                            <div className="input-group full-width"><label>Product Photos</label><input type="file" multiple accept="image/*" onChange={(e) => setNewStockImages(Array.from(e.target.files || []))} /></div>
+
+                            <div className="modal-actions-wrapper full-width">
+                                <button type="button" className="modal-btn cancel" onClick={() => setIsAddFormOpen(false)}>Cancel</button>
+                                <button type="submit" className="modal-btn confirm" disabled={isLoading}>{isLoading ? 'Saving...' : 'Save'}</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
             {isEditModalOpen && editingItem && (
                 <div className="dashboard-modal-overlay">
                     <div className="dashboard-modal-card">
@@ -454,18 +591,42 @@ const AdminDashboard = () => {
                             </div>
                             <div className="input-group">
                                 <label>Brand</label>
-                                <input type="text" value={editingItem.brand || ''} onChange={(e) => setEditingItem(prev => ({ ...prev, brand: e.target.value }))} required />
+                                <input type="text" value={editingItem.brand || ''} onChange={(e) => setEditingItem(prev => ({ ...prev, brand: e.target.value }))} />
                             </div>
                             <div className="input-group">
                                 <label>Status</label>
-                                <select value={editingItem.status || 'Active'} onChange={(e) => setEditingItem(prev => ({ ...prev, status: e.target.value }))}>
-                                    <option value="Active">Active</option>
-                                    <option value="Hidden">Hidden</option>
+                                <select value={editingItem.status || 'active'} onChange={(e) => setEditingItem(prev => ({ ...prev, status: e.target.value }))}>
+                                    <option value="active">Active</option>
+                                    <option value="hidden">Hidden</option>
                                 </select>
                             </div>
                             <div className="input-group">
+                                <label>Category</label>
+                                <input type="text" value={editingItem.category || ''} onChange={(e) => setEditingItem(prev => ({ ...prev, category: e.target.value }))} />
+                            </div>
+                            <div className="input-group">
                                 <label>Expiry Date</label>
-                                <input type="date" value={editingItem.expiry || ''} onChange={(e) => setEditingItem(prev => ({ ...prev, expiry: e.target.value }))} />
+                                <input type="date" value={editingItem.expiry_date || ''} onChange={(e) => setEditingItem(prev => ({ ...prev, expiry_date: e.target.value }))} />
+                            </div>
+                            <div className="input-group">
+                                <label>Colors</label>
+                                <input type="text" value={editingItem.colors || ''} onChange={(e) => setEditingItem(prev => ({ ...prev, colors: e.target.value }))} />
+                            </div>
+                            <div className="input-group">
+                                <label>Sizes</label>
+                                <input type="text" value={editingItem.sizes || ''} onChange={(e) => setEditingItem(prev => ({ ...prev, sizes: e.target.value }))} />
+                            </div>
+                            <div className="input-group full-width">
+                                <label>Description</label>
+                                <textarea value={editingItem.description || ''} onChange={(e) => setEditingItem(prev => ({ ...prev, description: e.target.value }))} rows="3"></textarea>
+                            </div>
+                            <div className="input-group full-width">
+                                <label>Replace Photos (Leaves existing if empty)</label>
+                                <input type="file" multiple accept="image/*" onChange={(e) => setEditImages(Array.from(e.target.files || []))} />
+                            </div>
+                            <div className="input-group full-width">
+                                <label>Replace Video (Leaves existing if empty)</label>
+                                <input type="file" accept="video/*" onChange={(e) => setEditVideo(e.target.files[0] || null)} />
                             </div>
                             <div className="modal-actions-wrapper full-width">
                                 <button type="button" className="modal-btn cancel" onClick={() => setIsEditModalOpen(false)}>Cancel</button>

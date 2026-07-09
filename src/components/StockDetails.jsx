@@ -227,7 +227,7 @@ const StockDetails = ({ stock }) => {
 
           <div className="action-footer-panel">
             <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="clean-text-action-btn">
-              Submit Bulk Inquiry &amp; Get Price Quote
+              Get Price Quote
             </a>
             <p className="commercial-notice">⚡ Freight calculations, packing lists, and custom shipping details compiled instantly upon allocation lookup.</p>
           </div>
