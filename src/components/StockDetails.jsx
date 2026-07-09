@@ -180,14 +180,13 @@ const StockDetails = ({ stock }) => {
         <section className="info-specification structured-panel">
           <div className="product-header">
             <div className="status-tags">
-              <span className="export-badge premium-gold">✨ Verified Export Lot</span>
               {selectedStock.brand && <span className="brand-badge">{selectedStock.brand}</span>}
             </div>
             <h1 className="stock-main-title">{selectedStock.title}</h1>
           </div>
 
           <div className="description-wrapper refined-narrative-box">
-            <h3>Commercial Description</h3>
+            <h3>Description</h3>
             <p className="line-break-text">
               {selectedStock.description || 'No commercial narrative provided for this item lot.'}
             </p>
@@ -229,7 +228,6 @@ const StockDetails = ({ stock }) => {
             <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="clean-text-action-btn">
               Get Price Quote
             </a>
-            <p className="commercial-notice">⚡ Freight calculations, packing lists, and custom shipping details compiled instantly upon allocation lookup.</p>
           </div>
         </section>
       </div>
